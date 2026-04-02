@@ -1,0 +1,13 @@
+[package]
+name = "saddle-ai-utility-ai-example-target-scoring"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+bevy = { workspace = true }
+saddle-ai-utility-ai = { workspace = true }
+saddle-ai-utility-ai-example-support = { path = "../support" }
+
+[lints]
+workspace = true

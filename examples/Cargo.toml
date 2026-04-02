@@ -1,0 +1,21 @@
+[workspace]
+members = [
+    "support",
+    "basic",
+    "response_curves",
+    "selection_strategies",
+    "target_scoring",
+    "realtime_cadence",
+    "stress_test",
+    "lab",
+]
+resolver = "3"
+
+[workspace.dependencies]
+bevy = { version = "0.18", features = ["serialize"] }
+saddle-ai-utility-ai = { path = ".." }
+
+[workspace.lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"
+nonstandard_macro_braces = "warn"
