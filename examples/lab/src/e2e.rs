@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_e2e::action::Action;
+use saddle_bevy_e2e::action::Action;
 use saddle_ai_utility_ai::UtilityAiSystems;
 
 use crate::scenarios;
@@ -8,10 +8,10 @@ pub struct UtilityAiLabE2EPlugin;
 
 impl Plugin for UtilityAiLabE2EPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins(bevy_e2e::E2EPlugin);
+        app.add_plugins(saddle_bevy_e2e::E2EPlugin);
         app.configure_sets(
             Update,
-            bevy_e2e::E2ESet.before(UtilityAiSystems::GatherInputs),
+            saddle_bevy_e2e::E2ESet.before(UtilityAiSystems::GatherInputs),
         );
 
         let args: Vec<String> = std::env::args().collect();
@@ -22,7 +22,7 @@ impl Plugin for UtilityAiLabE2EPlugin {
                 if handoff {
                     scenario.actions.push(Action::Handoff);
                 }
-                bevy_e2e::init_scenario(app, scenario);
+                saddle_bevy_e2e::init_scenario(app, scenario);
             } else {
                 error!(
                     "[utility_ai_lab:e2e] Unknown scenario '{name}'. Available: {:?}",
