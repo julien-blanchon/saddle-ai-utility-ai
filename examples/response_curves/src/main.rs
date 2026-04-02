@@ -1,8 +1,8 @@
 use saddle_ai_utility_ai_example_support as support;
 
 use bevy::prelude::*;
-use support::{configure_2d_example, ui_text_node};
 use saddle_ai_utility_ai::ResponseCurve;
+use support::{configure_2d_example, ui_text_node};
 
 #[derive(Component)]
 struct OverlayText;
@@ -14,7 +14,12 @@ fn main() {
     let mut app = App::new();
     configure_2d_example(&mut app, "utility_ai response curves", 6.0);
     app.insert_resource(CurveGallery(vec![
-        ("linear".into(), Color::srgb(0.90, 0.40, 0.34), ResponseCurve::Linear, 130.0),
+        (
+            "linear".into(),
+            Color::srgb(0.90, 0.40, 0.34),
+            ResponseCurve::Linear,
+            130.0,
+        ),
         (
             "logistic".into(),
             Color::srgb(0.22, 0.78, 0.92),

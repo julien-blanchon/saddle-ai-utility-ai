@@ -1,11 +1,11 @@
 use saddle_ai_utility_ai_example_support as support;
 
 use bevy::prelude::*;
-use support::{configure_2d_example, ui_text_node};
 use saddle_ai_utility_ai::{
     ActiveAction, ConsiderationInput, DecisionTraceBuffer, EvaluationPolicy, PriorityTier,
     ResponseCurve, UtilityAction, UtilityAgent, UtilityAiPlugin, UtilityConsideration,
 };
+use support::{configure_2d_example, ui_text_node};
 
 #[derive(Component)]
 struct OverlayText;
@@ -109,7 +109,10 @@ fn animate_inputs(
     time: Res<Time>,
     mut advance: Query<&mut ConsiderationInput, With<AdvanceNeed>>,
     mut recover: Query<&mut ConsiderationInput, (With<RecoverNeed>, Without<AdvanceNeed>)>,
-    mut idle: Query<&mut ConsiderationInput, (With<IdleNeed>, Without<AdvanceNeed>, Without<RecoverNeed>)>,
+    mut idle: Query<
+        &mut ConsiderationInput,
+        (With<IdleNeed>, Without<AdvanceNeed>, Without<RecoverNeed>),
+    >,
 ) {
     let seconds = time.elapsed_secs();
     let advance_value = ((seconds * 1.2).sin() * 0.5 + 0.5).clamp(0.0, 1.0);
@@ -134,7 +137,10 @@ fn update_overlay(
     let mut lines = vec![
         "utility_ai basic".to_string(),
         "Scores oscillate between advance, recover, and a low fallback wait action.".to_string(),
-        format!("Active action: {}", active.label.clone().unwrap_or_else(|| "none".into())),
+        format!(
+            "Active action: {}",
+            active.label.clone().unwrap_or_else(|| "none".into())
+        ),
     ];
 
     if let Some(trace) = &traces.last {

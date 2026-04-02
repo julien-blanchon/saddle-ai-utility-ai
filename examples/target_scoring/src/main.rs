@@ -1,12 +1,12 @@
 use saddle_ai_utility_ai_example_support as support;
 
 use bevy::prelude::*;
-use support::{configure_2d_example, ui_text_node};
 use saddle_ai_utility_ai::{
     ActionTarget, ConsiderationInput, DecisionTraceBuffer, EvaluationPolicy, ResponseCurve,
     SelectionStrategy, TargetKey, TargetRequirement, UtilityAction, UtilityAgent, UtilityAiPlugin,
     UtilityConsideration, UtilityTargetCandidate,
 };
+use support::{configure_2d_example, ui_text_node};
 
 #[derive(Component)]
 struct OverlayText;
@@ -114,11 +114,7 @@ fn animate_targets(time: Res<Time>, mut inputs: Query<(&TargetDriver, &mut Consi
     }
 }
 
-fn draw_scene(
-    mut gizmos: Gizmos,
-    layout: Res<TargetLayout>,
-    selected: Single<&ActionTarget>,
-) {
+fn draw_scene(mut gizmos: Gizmos, layout: Res<TargetLayout>, selected: Single<&ActionTarget>) {
     let agent_position = Vec2::ZERO;
     gizmos.circle_2d(agent_position, 18.0, Color::srgb(0.20, 0.72, 0.96));
 

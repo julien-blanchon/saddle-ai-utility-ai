@@ -1,11 +1,11 @@
 use saddle_ai_utility_ai_example_support as support;
 
 use bevy::prelude::*;
-use support::{configure_2d_example, ui_text_node};
 use saddle_ai_utility_ai::{
-    ConsiderationInput, EvaluationPolicy, UtilityAction, UtilityAgent, UtilityAiBudget,
-    UtilityAiPlugin, UtilityAiStats, UtilityConsideration, ResponseCurve,
+    ConsiderationInput, EvaluationPolicy, ResponseCurve, UtilityAction, UtilityAgent,
+    UtilityAiBudget, UtilityAiPlugin, UtilityAiStats, UtilityConsideration,
 };
+use support::{configure_2d_example, ui_text_node};
 
 #[derive(Component)]
 struct OverlayText;

@@ -55,9 +55,10 @@ fn plugin_registers_core_resources_and_messages() {
     assert!(app.world().contains_resource::<UtilityAiStats>());
     assert!(app.world().contains_resource::<Messages<ActionChanged>>());
     assert!(app.world().contains_resource::<Messages<ActionCompleted>>());
-    assert!(app
-        .world()
-        .contains_resource::<Messages<ActionEvaluationRequested>>());
+    assert!(
+        app.world()
+            .contains_resource::<Messages<ActionEvaluationRequested>>()
+    );
 }
 
 #[test]
@@ -163,13 +164,14 @@ fn explicit_reevaluation_request_drives_manual_agents() {
             .as_deref(),
         Some("high")
     );
-    assert!(app
-        .world()
-        .get::<DecisionTraceBuffer>(agent)
-        .unwrap()
-        .last
-        .as_ref()
-        .is_some_and(|trace| trace.requested));
+    assert!(
+        app.world()
+            .get::<DecisionTraceBuffer>(agent)
+            .unwrap()
+            .last
+            .as_ref()
+            .is_some_and(|trace| trace.requested)
+    );
 }
 
 #[test]
@@ -383,12 +385,13 @@ fn disabled_fallback_is_not_selected() {
 
     run_test_schedule(&mut app);
 
-    assert!(app
-        .world()
-        .get::<ActiveAction>(agent)
-        .unwrap()
-        .entity
-        .is_none());
+    assert!(
+        app.world()
+            .get::<ActiveAction>(agent)
+            .unwrap()
+            .entity
+            .is_none()
+    );
 }
 
 #[test]

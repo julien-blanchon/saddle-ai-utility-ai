@@ -185,11 +185,7 @@ impl ResponseCurve {
 }
 
 fn ordered_pair(a: f32, b: f32) -> (f32, f32) {
-    if a <= b {
-        (a, b)
-    } else {
-        (b, a)
-    }
+    if a <= b { (a, b) } else { (b, a) }
 }
 
 fn remap_input(input: f32, min: f32, max: f32) -> f32 {

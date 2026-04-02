@@ -25,11 +25,7 @@ fn spawn_camera(mut commands: Commands) {
     commands.spawn((Name::new("Camera"), Camera2d));
 }
 
-fn auto_exit(
-    time: Res<Time>,
-    lifetime: Res<ExampleLifetime>,
-    mut exit: MessageWriter<AppExit>,
-) {
+fn auto_exit(time: Res<Time>, lifetime: Res<ExampleLifetime>, mut exit: MessageWriter<AppExit>) {
     if time.elapsed_secs() >= lifetime.duration_seconds {
         exit.write(AppExit::Success);
     }

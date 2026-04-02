@@ -11,7 +11,7 @@ use crate::components::{
 use crate::curves::CurveEvaluation;
 use crate::messages::{ActionChanged, ActionCompleted, ActionEvaluationRequested};
 use crate::momentum::{apply_active_bonus, within_hysteresis_band};
-use crate::scoring::{compose_scores, ConsiderationOperand};
+use crate::scoring::{ConsiderationOperand, compose_scores};
 use crate::selection::{select_index, unit_from_seed};
 use crate::tracing::{
     ActionHistoryEntry, ActionTrace, ConsiderationTrace, DecisionTrace, TargetCandidateTrace,

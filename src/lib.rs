@@ -20,10 +20,10 @@ pub use curves::{CurveEvaluation, ResponseCurve};
 pub use messages::{ActionChanged, ActionCompleted, ActionEvaluationRequested};
 pub use momentum::{apply_active_bonus, within_hysteresis_band};
 pub use scoring::{
-    compose_scores, weighted_score, CompositionOutcome, CompositionPolicy, CompositionStrategy,
-    ConsiderationOperand,
+    CompositionOutcome, CompositionPolicy, CompositionStrategy, ConsiderationOperand,
+    compose_scores, weighted_score,
 };
-pub use selection::{select_index, PriorityTier, SelectionStrategy};
+pub use selection::{PriorityTier, SelectionStrategy, select_index};
 pub use tracing::{
     ActionHistoryEntry, ActionTrace, ConsiderationTrace, DecisionTrace, TargetCandidateTrace,
 };
