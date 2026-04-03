@@ -13,6 +13,7 @@ struct TestDeactivate;
 
 fn test_app() -> App {
     let mut app = App::new();
+    app.add_plugins((MinimalPlugins, AssetPlugin::default()));
     app.insert_resource(Time::<()>::default());
     app.init_schedule(TestUpdate);
     app.init_schedule(TestDeactivate);

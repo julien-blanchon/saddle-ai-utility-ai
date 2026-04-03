@@ -19,6 +19,17 @@ This document covers the tunable parts of the public API. Runtime diagnostics su
 | `DecisionMomentum::momentum_decay_per_second` | `0.0` | `>= 0` | Exponential decay rate applied to the active-action bonus |
 | `UtilityAiBudget::max_agents_per_update` | `128` | `>= 1` | Frame budget for due-agent evaluation |
 
+## Asset Loading
+
+`UtilityDecisionAssetLoader` registers the `.utility_ai.ron` extension and deserializes full agent/action/consideration graphs.
+
+| Type | Default | Valid Range | Effect |
+| --- | --- | --- | --- |
+| `UtilityDecisionAsset::agent` | n/a | asset-authored | Serializable `UtilityAgent` root data |
+| `UtilityDecisionAsset::evaluation_policy` | `None` | optional | Optional serialized `EvaluationPolicy` applied when spawning |
+| `UtilityDecisionAsset::momentum` | `None` | optional | Optional serialized `DecisionMomentum` applied when spawning |
+| `UtilityDecisionAsset::actions` | empty | any count | Serialized action subtree definitions |
+
 ## Action-Level Tunables
 
 | Type | Default | Valid Range | Effect |

@@ -1,21 +1,55 @@
 use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
 use crate::curves::ResponseCurve;
 use crate::scoring::{CompositionPolicy, CompositionStrategy};
 use crate::selection::{PriorityTier, SelectionStrategy};
 use crate::tracing::{ActionHistoryEntry, ConsiderationTrace, DecisionTrace, TargetCandidateTrace};
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub struct TargetKey(pub u64);
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub enum EvaluationMode {
     #[default]
     Interval,
     Manual,
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub enum ConsiderationCost {
     #[default]
     Cheap,
@@ -35,14 +69,25 @@ impl ConsiderationCost {
     }
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub enum TargetRequirement {
     #[default]
     Optional,
     Required,
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Reflect)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Reflect, Serialize, Deserialize)]
 pub enum TargetScoreFold {
     #[default]
     Multiply,
@@ -53,7 +98,18 @@ pub enum TargetScoreFold {
     Ignore,
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub enum ActionLifecycle {
     #[default]
     Idle,
@@ -70,7 +126,18 @@ impl ActionLifecycle {
     }
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub enum ActionSuppressionReason {
     #[default]
     Disabled,
@@ -81,7 +148,18 @@ pub enum ActionSuppressionReason {
     InvalidInput,
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub enum ActionChangeReason {
     #[default]
     InitialSelection,
@@ -95,7 +173,7 @@ pub enum ActionChangeReason {
     NoBetterChoice,
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct UtilityAgent {
     pub enabled: bool,
@@ -115,7 +193,7 @@ impl Default for UtilityAgent {
     }
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct EvaluationPolicy {
     pub mode: EvaluationMode,
@@ -159,7 +237,7 @@ impl EvaluationPolicy {
     }
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct DecisionMomentum {
     pub active_action_bonus: f32,
@@ -199,7 +277,7 @@ impl Default for ActiveAction {
     }
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct UtilityAction {
     pub label: String,
@@ -287,7 +365,7 @@ impl Default for ActionScore {
     }
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct ActionCooldown {
     pub duration_seconds: f32,
@@ -353,7 +431,7 @@ impl Default for UtilityTargetCandidate {
     }
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct UtilityConsideration {
     pub label: String,
@@ -386,7 +464,7 @@ impl UtilityConsideration {
     }
 }
 
-#[derive(Component, Clone, Debug, PartialEq, Reflect)]
+#[derive(Component, Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 #[reflect(Component, Debug, Default)]
 pub struct ConsiderationInput {
     pub value: Option<f32>,

@@ -1,6 +1,7 @@
 use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Default, PartialEq, Reflect)]
+#[derive(Clone, Debug, Default, PartialEq, Reflect, Serialize, Deserialize)]
 pub enum CompositionStrategy {
     Multiplicative,
     #[default]
@@ -12,7 +13,7 @@ pub enum CompositionStrategy {
     },
 }
 
-#[derive(Clone, Debug, PartialEq, Reflect)]
+#[derive(Clone, Debug, PartialEq, Reflect, Serialize, Deserialize)]
 pub struct CompositionPolicy {
     pub strategy: CompositionStrategy,
     pub floor: f32,
@@ -33,14 +34,14 @@ impl Default for CompositionPolicy {
     }
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Reflect)]
+#[derive(Clone, Debug, Default, PartialEq, Reflect, Serialize, Deserialize)]
 pub struct ConsiderationOperand {
     pub score: f32,
     pub weight: f32,
     pub enabled: bool,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Reflect)]
+#[derive(Clone, Debug, Default, PartialEq, Reflect, Serialize, Deserialize)]
 pub struct CompositionOutcome {
     pub score: f32,
     pub evaluated_count: usize,

@@ -11,6 +11,8 @@
 - `tracing.rs`: structured explanation data used by BRP, overlays, and E2E assertions
 - `systems.rs`: hierarchy traversal, cadence, scoring, selection, transitions, and trace refresh
 
+`assets.rs` now adds an authoring path for full decision graphs. `UtilityDecisionAssetLoader` deserializes `.utility_ai.ron` files into the same ECS hierarchy that the code-first API would spawn manually.
+
 ## Why This ECS Shape
 
 The crate uses Bevy's built-in parent/child hierarchy because it keeps the runtime debuggable through standard `Children` traversal and BRP queries.
