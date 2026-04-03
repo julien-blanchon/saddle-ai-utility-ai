@@ -1,6 +1,20 @@
 use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord, Reflect)]
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    Hash,
+    PartialOrd,
+    Ord,
+    Reflect,
+    Serialize,
+    Deserialize,
+)]
 pub struct PriorityTier(pub u8);
 
 impl PriorityTier {
@@ -9,7 +23,7 @@ impl PriorityTier {
     pub const FLAVOR: Self = Self(20);
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Reflect)]
+#[derive(Clone, Debug, Default, PartialEq, Reflect, Serialize, Deserialize)]
 pub enum SelectionStrategy {
     #[default]
     HighestScore,

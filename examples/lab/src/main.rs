@@ -8,6 +8,7 @@ use std::f32::consts::PI;
 use bevy::prelude::*;
 #[cfg(feature = "dev")]
 use bevy_brp_extras::BrpExtrasPlugin;
+use saddle_pane::prelude::*;
 use saddle_ai_utility_ai::{
     ActionChanged, ActionCompleted, ActionEvaluationRequested, ActionLifecycle, ActiveAction,
     CompositionPolicy, ConsiderationInput, DecisionMomentum, DecisionTraceBuffer, EvaluationPolicy,
@@ -70,6 +71,36 @@ pub struct LabDiagnostics {
     pub last_change_reason: String,
 }
 
+#[derive(Resource, Clone, Pane)]
+#[pane(title = "Utility Lab")]
+struct UtilityLabPane {
+    #[pane(slider, min = 0.1, max = 2.5, step = 0.05)]
+    time_scale: f32,
+    #[pane(slider, min = 1.0, max = 256.0, step = 1.0)]
+    max_agents_per_update: usize,
+    #[pane(slider, min = 0.02, max = 0.5, step = 0.01)]
+    evaluation_interval_seconds: f32,
+    #[pane(slider, min = 0.0, max = 1.0, step = 0.05)]
+    jitter_fraction: f32,
+    #[pane(slider, min = 0.0, max = 0.3, step = 0.01)]
+    active_action_bonus: f32,
+    #[pane(slider, min = 0.0, max = 0.2, step = 0.01)]
+    hysteresis_band: f32,
+}
+
+impl Default for UtilityLabPane {
+    fn default() -> Self {
+        Self {
+            time_scale: 1.0,
+            max_agents_per_update: 18,
+            evaluation_interval_seconds: 0.09,
+            jitter_fraction: 0.25,
+            active_action_bonus: 0.08,
+            hysteresis_band: 0.06,
+        }
+    }
+}
+
 fn main() {
     let mut app = App::new();
     app.insert_resource(ClearColor(Color::srgb(0.03, 0.035, 0.05)));
@@ -77,6 +108,7 @@ fn main() {
         max_agents_per_update: 18,
     });
     app.init_resource::<LabDiagnostics>();
+    app.init_resource::<UtilityLabPane>();
     app.register_type::<LabDiagnostics>();
     app.add_plugins(DefaultPlugins.set(WindowPlugin {
         primary_window: Some(Window {
@@ -86,12 +118,21 @@ fn main() {
         }),
         ..default()
     }));
+    app.add_plugins((
+        bevy_flair::FlairPlugin,
+        bevy_input_focus::InputDispatchPlugin,
+        bevy_ui_widgets::UiWidgetsPlugins,
+        bevy_input_focus::tab_navigation::TabNavigationPlugin,
+        saddle_pane::PanePlugin,
+    ));
+    app.register_pane::<UtilityLabPane>();
     #[cfg(feature = "dev")]
     app.add_plugins(BrpExtrasPlugin::with_port(lab_brp_port()));
     #[cfg(feature = "e2e")]
     app.add_plugins(e2e::UtilityAiLabE2EPlugin);
     app.add_plugins(UtilityAiPlugin::always_on(Update));
     app.add_systems(Startup, setup);
+    app.add_systems(Update, sync_pane_to_runtime);
     app.add_systems(Update, drive_inputs.before(UtilityAiSystems::GatherInputs));
     app.add_systems(
         Update,
@@ -112,6 +153,31 @@ fn main() {
     app.add_systems(Update, update_overlay.after(update_diagnostics));
     app.add_systems(Update, draw_debug_gizmos.after(update_diagnostics));
     app.run();
+}
+
+fn sync_pane_to_runtime(
+    pane: Res<UtilityLabPane>,
+    mut virtual_time: ResMut<Time<Virtual>>,
+    mut budget: ResMut<UtilityAiBudget>,
+    mut policies: Query<&mut EvaluationPolicy, With<UtilityAgent>>,
+    mut momentum: Query<&mut DecisionMomentum, With<UtilityAgent>>,
+) {
+    if !pane.is_changed() {
+        return;
+    }
+
+    virtual_time.set_relative_speed(pane.time_scale.max(0.1));
+    budget.max_agents_per_update = pane.max_agents_per_update.max(1);
+
+    for mut policy in &mut policies {
+        policy.base_interval_seconds = pane.evaluation_interval_seconds.max(0.01);
+        policy.jitter_fraction = pane.jitter_fraction.clamp(0.0, 1.0);
+    }
+
+    for mut entry in &mut momentum {
+        entry.active_action_bonus = pane.active_action_bonus.max(0.0);
+        entry.hysteresis_band = pane.hysteresis_band.max(0.0);
+    }
 }
 
 #[cfg(feature = "dev")]

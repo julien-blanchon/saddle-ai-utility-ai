@@ -1,5 +1,6 @@
 #![doc = include_str!("../README.md")]
 
+pub mod assets;
 mod components;
 mod curves;
 mod messages;
@@ -9,6 +10,10 @@ mod selection;
 mod systems;
 mod tracing;
 
+pub use assets::{
+    UtilityActionAsset, UtilityConsiderationAsset, UtilityDecisionAsset,
+    UtilityDecisionAssetLoader, UtilityDecisionAssetLoaderError,
+};
 pub use components::{
     ActionChangeReason, ActionCooldown, ActionLifecycle, ActionScore, ActionSuppressionReason,
     ActionTarget, ActiveAction, ConsiderationCost, ConsiderationInput, DecisionMomentum,
@@ -85,9 +90,14 @@ impl Plugin for UtilityAiPlugin {
         app.init_resource::<UtilityAiBudget>()
             .init_resource::<UtilityAiStats>()
             .init_resource::<systems::EvaluationBatch>()
+            .init_asset::<UtilityDecisionAsset>()
+            .register_asset_loader(UtilityDecisionAssetLoader)
             .add_message::<ActionChanged>()
             .add_message::<ActionCompleted>()
             .add_message::<ActionEvaluationRequested>()
+            .register_type::<UtilityActionAsset>()
+            .register_type::<UtilityConsiderationAsset>()
+            .register_type::<UtilityDecisionAsset>()
             .register_type::<ActionChangeReason>()
             .register_type::<ActionCooldown>()
             .register_type::<ActionLifecycle>()

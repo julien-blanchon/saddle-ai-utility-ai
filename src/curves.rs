@@ -1,8 +1,9 @@
 use std::f32::consts::PI;
 
 use bevy::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Default, PartialEq, Reflect)]
+#[derive(Clone, Debug, Default, PartialEq, Reflect, Serialize, Deserialize)]
 pub struct CurveEvaluation {
     pub input: f32,
     pub remapped_input: f32,
@@ -10,7 +11,7 @@ pub struct CurveEvaluation {
     pub invalid_input: bool,
 }
 
-#[derive(Clone, Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub enum ResponseCurve {
     #[default]
     Linear,

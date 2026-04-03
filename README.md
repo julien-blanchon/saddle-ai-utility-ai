@@ -4,6 +4,8 @@ Reusable utility-based decision making for Bevy ECS agents.
 
 The crate separates pure utility math from ECS orchestration. Game code owns perception, target discovery, locomotion, combat, animation, and any project-specific world queries. `utility_ai` owns response curves, consideration scoring, target folding, action selection, cooldowns, momentum, evaluation cadence, and runtime debug traces.
 
+Utility definitions can be serialized to and from RON through `UtilityDecisionAsset` and `UtilityDecisionAssetLoader`, so authoring no longer has to stay hard-coded in Rust.
+
 For apps where utility agents should stay active for the full app lifetime, prefer `UtilityAiPlugin::always_on(Update)`. Use `UtilityAiPlugin::new(...)` when activation should follow explicit schedules such as `OnEnter` / `OnExit`.
 
 ## Quick Start
@@ -67,6 +69,8 @@ fn setup(mut commands: Commands) {
 - Messages:
   `ActionChanged`, `ActionCompleted`, `ActionEvaluationRequested`
 
+`ResponseCurve` is now `serde`-serializable for asset-driven authoring. The curve graph stays out of Bevy reflection because recursive boxed curves are not currently reflect-friendly in Bevy 0.18.
+
 ## Core Model
 
 - Agents are parent entities that own cadence, momentum, debug history, and selection policy.
@@ -86,6 +90,8 @@ fn setup(mut commands: Commands) {
 | `realtime_cadence` | Show staggered cadence, jitter, and reevaluation requests | `cargo run -p saddle-ai-utility-ai-example-realtime-cadence` |
 | `stress_test` | Spawn many agents and log utility throughput | `cargo run -p saddle-ai-utility-ai-example-stress-test` |
 | `saddle-ai-utility-ai-lab` | Crate-local BRP/E2E showcase app | `cargo run -p saddle-ai-utility-ai-lab` |
+
+All windowed examples now expose live tuning through `saddle-pane`.
 
 ## Crate-Local Lab
 

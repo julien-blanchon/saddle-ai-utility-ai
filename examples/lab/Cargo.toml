@@ -11,9 +11,13 @@ e2e = ["dep:saddle-bevy-e2e"]
 
 [dependencies]
 bevy = { version = "0.18", features = ["bevy_remote", "serialize"] }
+bevy_flair = { workspace = true }
+bevy_input_focus = { workspace = true }
+bevy_ui_widgets = { workspace = true }
 saddle-ai-utility-ai = { workspace = true }
 bevy_brp_extras = { version = "0.19", optional = true }
 saddle-bevy-e2e = { git = "https://github.com/julien-blanchon/saddle-bevy-e2e", features = ["json"], optional = true }
+saddle-pane = { workspace = true }
 
 [lints]
 workspace = true
