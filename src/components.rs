@@ -6,50 +6,17 @@ use crate::scoring::{CompositionPolicy, CompositionStrategy};
 use crate::selection::{PriorityTier, SelectionStrategy};
 use crate::tracing::{ActionHistoryEntry, ConsiderationTrace, DecisionTrace, TargetCandidateTrace};
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub struct TargetKey(pub u64);
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub enum EvaluationMode {
     #[default]
     Interval,
     Manual,
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub enum ConsiderationCost {
     #[default]
     Cheap,
@@ -69,18 +36,7 @@ impl ConsiderationCost {
     }
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub enum TargetRequirement {
     #[default]
     Optional,
@@ -98,18 +54,7 @@ pub enum TargetScoreFold {
     Ignore,
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub enum ActionLifecycle {
     #[default]
     Idle,
@@ -126,18 +71,7 @@ impl ActionLifecycle {
     }
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub enum ActionSuppressionReason {
     #[default]
     Disabled,
@@ -148,18 +82,7 @@ pub enum ActionSuppressionReason {
     InvalidInput,
 }
 
-#[derive(
-    Clone,
-    Copy,
-    Debug,
-    Default,
-    PartialEq,
-    Eq,
-    Hash,
-    Reflect,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Reflect, Serialize, Deserialize)]
 pub enum ActionChangeReason {
     #[default]
     InitialSelection,

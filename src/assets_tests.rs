@@ -29,7 +29,9 @@ fn utility_decision_asset_spawns_agent_graph() {
     let consideration_entities = world.get::<Children>(action_entities[0]).unwrap().to_vec();
     assert_eq!(consideration_entities.len(), 1);
     assert!(world.get::<UtilityAction>(action_entities[0]).is_some());
-    assert!(world
-        .get::<UtilityConsideration>(consideration_entities[0])
-        .is_some());
+    assert!(
+        world
+            .get::<UtilityConsideration>(consideration_entities[0])
+            .is_some()
+    );
 }
