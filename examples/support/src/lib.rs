@@ -113,7 +113,7 @@ fn auto_exit(time: Res<Time>, lifetime: Res<ExampleLifetime>, mut exit: MessageW
 fn sync_pane_to_runtime(
     pane: Res<UtilityExamplePane>,
     mut virtual_time: ResMut<Time<Virtual>>,
-    mut budget: ResMut<UtilityAiBudget>,
+    mut budget: Option<ResMut<UtilityAiBudget>>,
     mut policies: Query<&mut EvaluationPolicy, With<UtilityAgent>>,
     mut momentum: Query<&mut DecisionMomentum, With<UtilityAgent>>,
     mut actions: Query<&mut UtilityAction>,
@@ -123,7 +123,9 @@ fn sync_pane_to_runtime(
     }
 
     virtual_time.set_relative_speed(pane.time_scale.max(0.1));
-    budget.max_agents_per_update = pane.max_agents_per_update.max(1);
+    if let Some(ref mut budget) = budget {
+        budget.max_agents_per_update = pane.max_agents_per_update.max(1);
+    }
 
     for mut policy in &mut policies {
         if policy.mode == EvaluationMode::Interval {
