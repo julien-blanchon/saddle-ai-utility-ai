@@ -1,6 +1,6 @@
 mod support;
 
-use saddle_bevy_e2e::{action::Action, scenario::Scenario};
+use saddle_bevy_e2e::{action::Action, actions::assertions, scenario::Scenario};
 
 use crate::LabDiagnostics;
 
@@ -58,6 +58,7 @@ fn build_smoke(name: &'static str) -> Scenario {
         })))
         .then(Action::Screenshot("smoke".into()))
         .then(Action::WaitFrames(1))
+        .then(assertions::log_summary(name))
         .build()
 }
 
@@ -78,6 +79,7 @@ fn utility_ai_flip_flop() -> Scenario {
         })))
         .then(Action::Screenshot("flip_flop_late".into()))
         .then(Action::WaitFrames(1))
+        .then(assertions::log_summary("utility_ai_flip_flop"))
         .build()
 }
 
@@ -99,6 +101,7 @@ fn utility_ai_target_pick() -> Scenario {
         .then(Action::WaitFrames(45))
         .then(Action::Screenshot("target_pick_hold".into()))
         .then(Action::WaitFrames(1))
+        .then(assertions::log_summary("utility_ai_target_pick"))
         .build()
 }
 
@@ -121,6 +124,7 @@ fn utility_ai_priority_tiers() -> Scenario {
         .then(Action::WaitFrames(45))
         .then(Action::Screenshot("priority_tiers_hold".into()))
         .then(Action::WaitFrames(1))
+        .then(assertions::log_summary("utility_ai_priority_tiers"))
         .build()
 }
 
@@ -139,6 +143,7 @@ fn utility_ai_stress() -> Scenario {
         })))
         .then(Action::Screenshot("stress_peak".into()))
         .then(Action::WaitFrames(1))
+        .then(assertions::log_summary("utility_ai_stress"))
         .build()
 }
 
