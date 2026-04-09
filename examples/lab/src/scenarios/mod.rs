@@ -32,29 +32,17 @@ pub fn scenario_by_name(name: &str) -> Option<Scenario> {
 fn build_smoke(name: &'static str) -> Scenario {
     Scenario::builder(name)
         .description("Boot the crate-local utility AI lab, wait for all showcase agents to pick actions, and capture the diagnostic overlay.")
-        .then(Action::WaitUntil {
-            label: "agents selected".into(),
-            condition: Box::new(|world| {
-                let diagnostics = world.resource::<LabDiagnostics>();
-                !diagnostics.flip_active.is_empty()
-                    && diagnostics.target_active == "engage"
-                    && diagnostics.target_selected_target == "relay_beta"
-                    && diagnostics.priority_active == "panic"
-                    && diagnostics.action_changed_messages >= 3
-            }),
-            max_frames: 180,
-        })
+        .then(support::wait_for_core_selection())
         .then(Action::Custom(Box::new(|world| {
             let diagnostics = world.resource::<LabDiagnostics>();
             assert!(diagnostics.action_changed_messages >= 3);
             assert_eq!(diagnostics.target_selected_target, "relay_beta");
             assert_eq!(diagnostics.priority_active, "panic");
 
-            let overlay = support::overlay_text(world).expect("overlay text should exist");
-            assert!(overlay.contains("utility_ai lab"));
-            assert!(overlay.contains("flip agent"));
-            assert!(overlay.contains("target agent"));
-            assert!(overlay.contains("priority agent"));
+            assert!(support::overlay_has_labels(
+                world,
+                &["utility_ai lab", "flip agent", "target agent", "priority agent"],
+            ));
         })))
         .then(Action::Screenshot("smoke".into()))
         .then(Action::WaitFrames(1))
@@ -86,11 +74,7 @@ fn utility_ai_flip_flop() -> Scenario {
 fn utility_ai_target_pick() -> Scenario {
     Scenario::builder("utility_ai_target_pick")
         .description("Verify the target-scored action selects the expected relay target and exposes the winner in diagnostics.")
-        .then(Action::WaitUntil {
-            label: "target selected".into(),
-            condition: Box::new(|world| world.resource::<LabDiagnostics>().target_selected_target == "relay_beta"),
-            max_frames: 120,
-        })
+        .then(support::wait_for_target_selection())
         .then(Action::Custom(Box::new(|world| {
             let diagnostics = world.resource::<LabDiagnostics>();
             assert_eq!(diagnostics.target_active, "engage");
@@ -108,11 +92,7 @@ fn utility_ai_target_pick() -> Scenario {
 fn utility_ai_priority_tiers() -> Scenario {
     Scenario::builder("utility_ai_priority_tiers")
         .description("Verify a critical-tier emergency action suppresses a strong tactical option once its threshold is met.")
-        .then(Action::WaitUntil {
-            label: "priority settled".into(),
-            condition: Box::new(|world| world.resource::<LabDiagnostics>().priority_active == "panic"),
-            max_frames: 120,
-        })
+        .then(support::wait_for_priority_selection())
         .then(Action::Custom(Box::new(|world| {
             let diagnostics = world.resource::<LabDiagnostics>();
             assert_eq!(diagnostics.priority_active, "panic");
@@ -133,7 +113,7 @@ fn utility_ai_stress() -> Scenario {
         .description("Verify crowd evaluation stays budgeted across frames and the stress swarm produces real throughput diagnostics.")
         .then(Action::WaitFrames(90))
         .then(Action::Screenshot("stress_warmup".into()))
-        .then(Action::WaitFrames(130))
+        .then(support::wait_for_stress_throughput())
         .then(Action::Custom(Box::new(|world| {
             let diagnostics = world.resource::<LabDiagnostics>();
             assert!(diagnostics.stress_active_agents >= 40);
@@ -150,16 +130,7 @@ fn utility_ai_stress() -> Scenario {
 fn utility_ai_handoff() -> Scenario {
     Scenario::builder("utility_ai_handoff")
         .description("Leave the lab running after the core scenarios settle so BRP can inspect traces, scores, and the active target line.")
-        .then(Action::WaitUntil {
-            label: "stable runtime".into(),
-            condition: Box::new(|world| {
-                let diagnostics = world.resource::<LabDiagnostics>();
-                diagnostics.target_selected_target == "relay_beta"
-                    && diagnostics.priority_active == "panic"
-                    && diagnostics.stress_peak_skipped_due_to_budget > 0
-            }),
-            max_frames: 220,
-        })
+        .then(support::wait_for_handoff_ready())
         .then(Action::Screenshot("handoff_ready".into()))
         .handoff()
         .build()
